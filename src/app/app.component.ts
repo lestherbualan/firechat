@@ -1,29 +1,28 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Auth, User, user } from '@angular/fire/auth';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'firechat';
-  isLoading: boolean = false;
-  private auth: Auth = inject(Auth);
+export class AppComponent implements OnInit,OnDestroy {
 
-  user$ = user(this.auth);
-  userSubscription: Subscription;
+  user$ = user(this._auth);
+  private readonly onDestroy$ = new Subject<void>();
 
-  constructor() {
-    this.userSubscription = this.user$.subscribe((aUser: User | null) => {
-        //handle user state changes here. Note, that user will be null if there is no currently logged in user.
-     console.log(aUser);
+  constructor(private _auth: Auth) {}
+  
+  ngOnInit(): void {
+    this.user$.subscribe((aUser: User | null) => {
+      //handle user state changes here. Note, that user will be null if there is no currently logged in user.
+      console.log(aUser);
     })
   }
 
   ngOnDestroy() {
-    // when manually subscribing to an observable remember to unsubscribe in ngOnDestroy
-    this.userSubscription.unsubscribe();
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 }

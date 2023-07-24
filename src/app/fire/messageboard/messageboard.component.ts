@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-messageboard',
@@ -6,7 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./messageboard.component.css']
 })
 export class MessageboardComponent {
-  constructor(){
-    console.log('this is message board')
+  constructor(private _authService: AuthService){}
+
+
+  logout(){
+    this._authService.logout();
   }
 }

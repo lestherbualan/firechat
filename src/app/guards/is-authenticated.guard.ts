@@ -14,7 +14,6 @@ export class IsAuthenticatedGuard implements CanActivate {
   
   isAuthenticated: boolean = false;
   user$ = user(this._auth);
-  userSubscription: Subscription = new Subscription;
 
   canActivate(
     route: ActivatedRouteSnapshot,
